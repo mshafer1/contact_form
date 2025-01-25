@@ -1,0 +1,17 @@
+services:
+  web:
+    container_name: image_web_${DOMAIN}
+    build:
+      context: ../
+      dockerfile: image/Dockerfile
+      args:
+        - DOMAIN=${DOMAIN:-localhost}
+    env_file:
+      - .env
+    network_mode: host # required to get alpine to resolve DNS names...
+    # https://github.com/gliderlabs/docker-alpine/issues/476
+    volumes:
+      - ../contact_form:/app/contact_form
+      - /run/uwsgi/${DOMAIN:-localhost}:/app/uwsgi
+      - ./logs:/var/log/uwsgi_email_form
+    restart: unless-stopped
