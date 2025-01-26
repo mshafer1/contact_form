@@ -11,6 +11,8 @@ server {
     }
 
     location / {
+      add_headers X-Frame-Options "allow-from '{VALID_REFERERS}'" always;
+
       include uwsgi_params;
       client_max_body_size 2M;
       uwsgi_pass unix:'{SOCKET}';
