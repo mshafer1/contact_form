@@ -59,3 +59,45 @@ Their first plan that offers that costs $60/mo. That's $720 /yr.
 
 
   
+## Setup
+
+Prerequisites:
+- A domain name (pointing at your server through some method, I'm using CloudFlare Tunnel [reference](https://youtu.be/ey4u7OUAF3c?si=e1oBcK_ufDrghS7A&t=320))
+- A nginx server (running, setup will configure the site with nginx)
+
+
+1. `git clone https://github.com/mshafer1/contact_form`
+
+1. `cd contact_form`
+
+1. Edit `./image/.env` with values for the following variables:
+    ```bash
+    #./image.env
+    VALID_REFERERS=
+    DOMAIN=
+    SECRET_KEY=
+
+    SENDGRID_API_KEY=
+    SENDGRID_SENDER_ADDRESS=
+    SENDGRID_CONTACT_ADDRESS=
+    ```
+
+    - `VALID_REFERERS=` this should be a space separated list of domains that you want to allow to embed this form (see [nginx docs](https://nginx.org/en/docs/http/ngx_http_referer_module.html#valid_referers) -> setup will populate this value with the `valid_referers server_names` prefix). If you do not want any, put "none" (without the quotes)
+
+    - `DOMAIN=` the domain it should be served (will be used to tell nginx to handle the site)
+
+    - `SECRET_KEY=` make up something long and random (a GUID should work). Used by flask as basis for secrets
+
+    - `SENDGRID_API_KEY=` your API from https://app.sendgrid.com/settings/api_keys
+
+    - `SENCGRID_SENDER_ADDRESS=` the email address you have authorized on Sendgrid as a sender, and you would like to have be the origin of the emails from the form.
+
+    - `SENDGRID_CONTACT_ADDRESS=` the email address to send messages to.
+
+1. Bring up the service container
+    
+    `pushd ./image && docker compose build && docker compose up -d && popd`
+
+1. Configure nginx site (run as root, or replace "make" with "sudo make")
+    
+    `pushd ./hosting && make install`
