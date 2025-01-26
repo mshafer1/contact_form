@@ -2,7 +2,6 @@
 
 import decouple
 import flask
-import flask_cors
 import flask_wtf
 import sendgrid
 import sendgrid.helpers.mail
@@ -23,7 +22,7 @@ app = flask.Flask(__name__)
 app.secret_key = _secret_key
 app.config["WTF_CSRF_ENABLED"] = False
 csrf = wtforms.csrf.core.CSRF()
-cors = flask_cors.CORS(app)
+
 
 class _ContactForm(flask_wtf.FlaskForm):
     name = wtforms.StringField(
