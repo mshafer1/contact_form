@@ -4,7 +4,7 @@ server {
 
     valid_referers server_names '{VALID_REFERERS}';
 
-    if ($invalid_referer) {
+    if ($invalid_referer = "1") {
         return 403;
     }
 
