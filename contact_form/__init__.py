@@ -19,6 +19,8 @@ if _sendgrid_api_key and not _sendgrid_sender_address:
 
 app = flask.Flask(__name__)
 app.secret_key = _secret_key
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
 class _ContactForm(flask_wtf.FlaskForm):
     name = wtforms.StringField(
