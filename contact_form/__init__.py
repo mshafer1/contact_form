@@ -86,8 +86,11 @@ def _contact():
                 )
             flask.flash(
                 "We're sorry, but there was an error sending your message."
-                " It should be in our logs, but you can try again if you would like."
+                " Please try again later."
             )
         else:
+            print("Form is not valid")
+            print(flask.request.form)
+            print(form.errors)
             flask.flash("There was an error with your submission. Please try again.")
     return flask.render_template("contact.html", form=form)
