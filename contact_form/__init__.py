@@ -25,14 +25,14 @@ csrf = wtforms.csrf.core.CSRF()
 
 class _ContactForm(flask_wtf.FlaskForm):
     name = wtforms.StringField(
-        "Name",
+        "Your Name",
         validators=[
             wtforms.validators.DataRequired(),
             wtforms.validators.Length(min=2, max=50),
         ],
     )
     email = wtforms.StringField(
-        "Email",
+        "Email you would like to be contacted at",
         validators=[wtforms.validators.DataRequired(), wtforms.validators.Email()],
     )
     message = wtforms.TextAreaField(
