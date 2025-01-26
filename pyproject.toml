@@ -13,6 +13,7 @@ python-decouple = "^3.8"
 email-validator = "^2.2.0"
 sendgrid = "^6.11.0"
 uWSGI = {version = "^2.0.20", platform="linux"}
+flask-cors = "^5.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ni-python-styleguide = "^0.4.6"
