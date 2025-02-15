@@ -8,14 +8,12 @@ import sendgrid.helpers.mail
 import wtforms
 import uuid
 
-_secret_key = decouple.config("SECRET_KEY")
-_sendgrid_api_key = decouple.config("SENDGRID_API_KEY", default=None)
-_sendgrid_sender_address = decouple.config("SENDGRID_SENDER_ADDRESS", default=None)
-_sendgrid_contact_address = decouple.config("SENDGRID_CONTACT_ADDRESS", default=None)
-if _sendgrid_api_key is None:
-    print("SENDGRID_API_KEY not found in .env file. Email will not be sent.")
-if _sendgrid_api_key and not _sendgrid_sender_address:
-    raise ValueError("SENDGRID_SENDER_ADDRESS must be set if SENDGRID_API_KEY is set.")
+from contact_form import _config
+
+_secret_key = _config.secret_key
+_sendgrid_api_key = _config.sendgrid_api_key
+_sendgrid_sender_address = _config.sendgrid_sender_address
+_contact_address = _config.contact_address
 
 app = flask.Flask(__name__)
 app.secret_key = _secret_key
@@ -55,7 +53,7 @@ def _send_email(name, email, message):
             _sendgrid_sender_address, f"{name} via contact form"
         ),
         subject=f"New message from {name} via the contact form - Message ID {uuid.uuid4().hex[:8]}",
-        to_emails=_sendgrid_contact_address,
+        to_emails=_contact_address,
         plain_text_content=f"Message form {name}\n\n{message}",
     )
     message.reply_to=sendgrid.helpers.mail.Email(email, name)
