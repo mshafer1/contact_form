@@ -63,9 +63,9 @@ Their first plan that offers that costs $60/mo. That's $720 /yr.
 
 Prerequisites:
 - A domain name (pointing at your server through some method, I'm using CloudFlare Tunnel [reference](https://youtu.be/ey4u7OUAF3c?si=e1oBcK_ufDrghS7A&t=320))
-- A nginx server (running, setup will configure the site with nginx)
+- An [nginx server](https://github.com/mshafer1/ansible-configs?tab=readme-ov-file#bootstrapping-an-nginx-server) (running, setup will configure the site with nginx)
 
-
+Steps:
 1. `git clone https://github.com/mshafer1/contact_form`
 
 1. `cd contact_form`
@@ -76,6 +76,7 @@ Prerequisites:
     VALID_REFERERS=
     DOMAIN=
     SECRET_KEY=
+    FORM_NAME=
 
     SENDGRID_API_KEY=
     SENDGRID_SENDER_ADDRESS=
@@ -84,7 +85,9 @@ Prerequisites:
 
     - `VALID_REFERERS=` this should be a space separated list of domains that you want to allow to embed this form (see [nginx docs](https://nginx.org/en/docs/http/ngx_http_referer_module.html#valid_referers) -> setup will populate this value with the `valid_referers server_names` prefix). If you do not want any, put "none" (without the quotes)
 
-    - `DOMAIN=` the domain it should be served (will be used to tell nginx to handle the site)
+    - `DOMAIN=` the domain it should be served (will be used to tell nginx to handle the site). If using multiple domain names, just least each separated by a space (wrap the whole list in single quotes - `'`)
+
+    - `FORM_NAME=` name used for the nginx and uwsgi socket files (just an identifier, "contact_form" would be fine if this is the only instance running)
 
     - `SECRET_KEY=` make up something long and random (a GUID should work). Used by flask as basis for secrets
 
@@ -94,10 +97,39 @@ Prerequisites:
 
     - `SENDGRID_CONTACT_ADDRESS=` the email address to send messages to.
 
+    **NOTE:** To handle multiple domains with different recipients based on the form domain
+        
+      1. Remove `SENDGRID_SENDER_ADDRESS` and `SENDGRID_CONTACT_ADDRESS` from the `.env` file.
+      1. Create a `.config.yaml` (location defaults to the `contact_form` folder, and can be configured by `CONFIG_DIR` in the `.env` file)
+      1. Format `.config.yaml` as a list containing dictionaries. Each dictionary needs to provide:
+       
+            * `pattern`, the `fnmatch` glob used to determine if the submitted form's domain is for this set (use '*' for all)
+            * `sender_address`, the sender for this domain
+            * `recipient_address`, the recipient of the contact form for this domain
+
+      1. Place groups in order of precedence (first match is taken)
+    
+      ```yaml
+      # example .config.yaml
+      - pattern: '*.example.com'
+        sender_address: 'no-reply@example.com'
+        recipient_address: admin@example.com
+      - pattern: domain2.com
+        sender_address: 'no-reply@domain2.com'
+        recipient_address: admin@domain2.com
+      ```
+
+
 1. Bring up the service container
     
     `pushd ./image && docker compose build && docker compose up -d && popd`
 
 1. Configure nginx site (run as root, or replace "make" with "sudo make")
     
-    `pushd ./hosting && make install`
+    `pushd ./hosting && make install && popd`
+
+1. (Optional) if hosting directly (exposed ports on server), use certbot to setup SSL cert to serve app over https -> (Alternative setup, see [Network Chuck's Video on using CloudFlare Tunnel](https://www.youtube.com/watch?v=ey4u7OUAF3c&t=188s&pp=ygUlbmV0d29ya2NodWNrIGV4cG9zZSB5b3VyIGhvbWUgbmV0d29yaw%3D%3D))
+
+    (run as root, or replace "make" with "sudo make")
+
+    `pushd ./hosting && make install_ssl && popd`

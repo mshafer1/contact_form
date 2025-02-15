@@ -1,6 +1,6 @@
 services:
   web:
-    container_name: image_web_${DOMAIN}
+    container_name: image_web_${FORM_NAME}
     build:
       context: ../
       dockerfile: image/Dockerfile
@@ -12,6 +12,6 @@ services:
     # https://github.com/gliderlabs/docker-alpine/issues/476
     volumes:
       - ../contact_form:/app/contact_form
-      - /run/uwsgi/${DOMAIN:-localhost}:/app/uwsgi
+      - /run/uwsgi/${FORM_NAME}:/app/uwsgi
       - ./logs:/var/log/uwsgi_email_form
     restart: unless-stopped
