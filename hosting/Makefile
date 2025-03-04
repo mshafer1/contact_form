@@ -19,15 +19,21 @@ objects/:
 	mkdir --parent objects
 
 objects/install: host_nginx_config ../image/.env objects/
-	sed \
-	-e "s/'{DOMAIN_NAME}'/$(DOMAIN)/g" \
+	rm -f objects/_temp_test_config
+	$(foreach domain_,$(DOMAIN),sed \
+	-e "s/'{DOMAIN_NAME}'/$(domain_)/g" \
 	-e "s;'{SOCKET}';$(SOCKET);g" \
 	-e "s;'{VALID_REFERERS}';$(VALID_REFERERS);g" \
-	$< > objects/_temp_test_config && \
+	$< >> objects/_temp_test_config;)
+	
 	cp -f objects/_temp_test_config /etc/nginx/sites-enabled/contact-form-$(FORM_NAME)
+	
 	nginx -t
+	
 	systemctl restart nginx
+	
 	touch $@
+
 
 objects/install_ssl: objects/install
 	certbot --nginx -d $(DOMAIN) --redirect
