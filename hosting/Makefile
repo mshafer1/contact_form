@@ -1,8 +1,22 @@
 
 # provides HTTP_PORT, HTTPS_PORT, and DOMAIN
-include ../image/.env
+$(shell cp -f ../image/.env objects/.env)
+$(shell sed -e "s/=/:=/g" -i objects/.env)
+
+include objects/.env
 
 SOCKET = /run/uwsgi/$(FORM_NAME)/socket.sock
+
+ifeq ($(DOMAIN_ONLY),1)
+	ifeq ($(REQUIRE_EMBED),1)
+VALID_REFERERS = *.$(domain_)
+	else
+VALID_REFERERS = none *.$(domain_)
+	endif
+else
+# not modifying the referers
+endif
+
 
 export DOMAIN
 export VALID_REFERERS

@@ -119,6 +119,9 @@ Steps:
         recipient_address: admin@domain2.com
       ```
 
+    - (Optional) Use `DOMAIN_ONLY=1` to require the current domain for embed / referrer (as opposed to all domains)
+
+    - (Optional) Use `REQUIRE_EMBED=1` to disallow "none" as a valid referrer (only takes affect if `DOMAIN_ONLY=1` is used)
 
 1. Bring up the service container
     
