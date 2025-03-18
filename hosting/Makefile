@@ -1,6 +1,6 @@
 
 # provides HTTP_PORT, HTTPS_PORT, and DOMAIN
-$(shell cp -f ../image/.env objects/.env)
+$(shell mkdir objects; cp -f ../image/.env objects/.env)
 $(shell sed -e "s/=/:=/g" -i objects/.env)
 
 include objects/.env
