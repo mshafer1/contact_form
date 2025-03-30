@@ -42,42 +42,43 @@ class _ContactForm(flask_wtf.FlaskForm):
 
 
 def _send_email(name, email, message, domain):
-    if not _sendgrid_api_key:
-        print("SENDGRID_API_KEY not configured. Email will not be sent.")
-        print("testing mode, not sending:", name, email, message)
-        return "TEST_VALID" in message
-
     for config in _config.domains:
-        if not fnmatch.fnmatch(domain, config.pattern):
-            continue
-
-        sg = sendgrid.SendGridAPIClient(api_key=_sendgrid_api_key)
-        message = sendgrid.helpers.mail.Mail(
-            from_email=sendgrid.helpers.mail.Email(
-                config.sender_address, f"{name} via contact form"
-            ),
-            subject=(
-                f"New message from {name} via the contact form "
-                f"- Message ID {uuid.uuid4().hex[:8]}"
-            ),
-            to_emails=config.recipient_address,
-            plain_text_content=f"Message form {name}\n\n{message}",
-        )
-        message.reply_to = sendgrid.helpers.mail.Email(email, name)
-        try:
-            sg = sendgrid.SendGridAPIClient(api_key=_sendgrid_api_key)
-            response = sg.send(message)
-            print("Email sent, response code:", response.status_code)
-        except Exception as e:
-            print(e)
-            return False
-        return True
+        if fnmatch.fnmatch(domain, config.pattern):
+            break
     else:
         print(
             f"No config domain matched {domain}."
             f" Tried: {', '.join([i.pattern for i in _config.domains])}"
         )
         return False
+
+    if not _sendgrid_api_key:
+        print("SENDGRID_API_KEY not configured. Email will not be sent.")
+        print("testing mode, not sending:", name, email, message, "From:", domain, config.sender_address, config.recipient_address)
+        return "TEST_VALID" in message
+
+    sg = sendgrid.SendGridAPIClient(api_key=_sendgrid_api_key)
+    message = sendgrid.helpers.mail.Mail(
+        from_email=sendgrid.helpers.mail.Email(
+            config.sender_address, f"{name} via contact form"
+        ),
+        subject=(
+            f"New message from {name} via the contact form "
+            f"- Message ID {uuid.uuid4().hex[:8]}"
+        ),
+        to_emails=config.recipient_address,
+        plain_text_content=f"Message form {name}\n\n{message}",
+    )
+    message.reply_to = sendgrid.helpers.mail.Email(email, name)
+    try:
+        sg = sendgrid.SendGridAPIClient(api_key=_sendgrid_api_key)
+        response = sg.send(message)
+        print("Email sent, response code:", response.status_code)
+    except Exception as e:
+        print(e)
+        return False
+    return True
+        
 
 
 @app.route("/", methods=["GET", "POST"])
