@@ -136,3 +136,33 @@ Steps:
     (run as root, or replace "make" with "sudo make")
 
     `pushd ./hosting && make install_ssl && popd`
+
+
+## Testing a deployment.
+
+If a site is setup to require a given referer, one can use cURL to fetch the page and validate.
+
+NOTE: this following command assumes the domain name is not pointing at the server yet, so it accomplishes http by talking to localhost and specifying the host header.
+
+```bash
+curl -H 'Host: {domain name}' --referer '{refering url}' http://127.0.0.1/
+```
+
+(replacing "{domain name}" and "{refering domain}" with the appropriate values)
+
+
+## Firewall rules
+
+If using external domain:
+```
+ufw allow http
+ufw allow https
+```
+
+If using a docker based tunnel:
+```
+ufw allow from 172.0.0.0/8 proto tcp to any port 80
+ufw allow in on DOCKER0 proto tcp to any port 80
+```
+
+(assuming TLS is handled outside the tunnel)
