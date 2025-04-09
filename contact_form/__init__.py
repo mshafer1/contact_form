@@ -19,7 +19,6 @@ app.secret_key = _secret_key
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
-
 class _ContactForm(flask_wtf.FlaskForm):
     name = wtforms.StringField(
         "Your Name",
@@ -36,7 +35,7 @@ class _ContactForm(flask_wtf.FlaskForm):
         "Message",
         validators=[
             wtforms.validators.DataRequired(),
-            wtforms.validators.Length(min=5, max=500),
+            wtforms.validators.Length(min=1, max=500),
         ],
     )
 
