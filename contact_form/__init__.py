@@ -66,7 +66,7 @@ def _send_email(name, email, message, domain):
             f"- Message ID {uuid.uuid4().hex[:8]}"
         ),
         to_emails=config.recipient_address,
-        plain_text_content=f"Message form {name}\n\n{message}",
+        plain_text_content=f"Message from {name}\n\n{message}",
     )
     message.reply_to = sendgrid.helpers.mail.Email(email, name)
     try:
