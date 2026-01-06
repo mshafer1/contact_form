@@ -1,4 +1,4 @@
-FROM python:3.13.1-alpine3.21 AS base
+FROM python:3.14.1-alpine3.21 AS base
 
 RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime
 
