@@ -1,43 +1,43 @@
-FROM python:3.13.1-alpine3.21 AS base
+# 3.14.2-alpine3.23
+FROM python@sha256:7af51ebeb83610fb69d633d5c61a2efb87efa4caf66b59862d624bb6ef788345 AS poetry_installed
 
-RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime
+RUN apk update && apk add --no-cache curl python3-dev libressl-dev gcc libc6-compat rust libc-dev cargo pkgconf py3-openssl
 
-RUN apk update && apk -U upgrade
+RUN python3 -m pip install poetry poetry-plugin-export
 
-# tools to build uwsgi
-RUN apk add --no-cache \
-    gcc \
-    libc-dev \
-    linux-headers
+FROM poetry_installed AS requirements_listed
 
-RUN python3 -m pip install -U pip supervisor
+COPY app/pyproject.toml app/poetry.lock ./
 
-RUN mkdir /app
+RUN poetry export -o requirements.txt
+
+# 3.14.2-alpine3.23
+FROM python@sha256:7af51ebeb83610fb69d633d5c61a2efb87efa4caf66b59862d624bb6ef788345 AS COMPILE_LAYER
+
+RUN apk update && apk add --no-cache python3-dev build-base linux-headers
+
 WORKDIR /app
-RUN mkdir --parent /var/log/uwsgi_email_form /app/contact_form
 
-RUN apk add shadow && groupmod --gid 33 www-data
+COPY --from=requirements_listed requirements.txt ./
 
-FROM base AS poetry_installed
+RUN python3 -m pip install -r requirements.txt
 
-RUN python3 -m pip install poetry==2.0.1
+RUN pip wheel -w /wheels -r requirements.txt
 
+# 3.14.2-alpine3.23
+FROM python@sha256:7af51ebeb83610fb69d633d5c61a2efb87efa4caf66b59862d624bb6ef788345 AS app
 
-COPY ./pyproject.toml /app/pyproject.toml
-COPY ./poetry.lock /app/poetry.lock
-RUN touch /app/contact_form/__init__.py
+COPY --from=COMPILE_LAYER /wheels /wheels
+RUN python3 -m pip install --no-index --find-links=/wheels /wheels/*.whl
 
-RUN python3 -m venv /app/venv
-RUN . /app/venv/bin/activate && poetry install --only main
+WORKDIR /app
 
-FROM base AS app_installed
-
-COPY --from=poetry_installed /app/venv /app/venv
-
-# COPY ./contact_form /app/contact_form
 COPY ./image/config/wsgi.ini /app/config/wsgi.ini
 COPY ./image/config/supervisord.conf /etc/supervisord.conf
 
+COPY ./app /app
+
+RUN python3 -m pip install -e .
 
 ARG DOMAIN
 ENV DOMAIN $DOMAIN

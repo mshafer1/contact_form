@@ -1,22 +1,23 @@
 [tool.poetry]
 name = "contact_form"
-version = "0.1.0"
+version = "0.2.0"
 description = "A flask based contact form"
 authors = ["mshafer1 <2565361+mshafer1@users.noreply.github.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-Flask = "^3.1.0"
+python = "^3.11"
+Flask = "^3.1.2"
 Flask-WTF = "^1.2.2"
 python-decouple = "^3.8"
-email-validator = "^2.2.0"
-sendgrid = "^6.11.0"
-uWSGI = {version = "^2.0.20", platform="linux"}
-pyyaml = "^6.0.2"
+email-validator = "^2.3.0"
+sendgrid = "^6.12.5"
+uWSGI = { version="^2.0.31", platform="linux"}
+supervisor = { version="^4.3.0", platform="linux"}
+pyyaml = "^6.0.3"
 
 [tool.poetry.group.dev.dependencies]
-ni-python-styleguide = "^0.4.6"
+ni-python-styleguide = "^0.4.7"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
