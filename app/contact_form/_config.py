@@ -23,11 +23,13 @@ _config_dir: _typing.Optional[_pathlib.Path] = _decouple.config(
     "CONFIG_DIR", default=_pathlib.Path(__file__).parent, cast=_pathlib.Path
 )
 
+print(f"CONFIG_DIR is {_config_dir}")
 _config_file: _typing.Optional[_pathlib.Path] = (
     None if _config_dir is None else (_config_dir / ".config.yaml")
 )
 _config: _typing.Optional[_typing.Dict[str, dict]] = None
 if _config_file and _config_file.is_file():
+    print(f"Loading config file: {_config_file}")
     _config = _yaml.load(_config_file.read_text(), Loader=_yaml.CSafeLoader)
 
 secret_key: str = _decouple.config("SECRET_KEY")
