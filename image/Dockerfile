@@ -1,4 +1,4 @@
-FROM python:3.14.2-alpine3.23@sha256:7af51ebeb83610fb69d633d5c61a2efb87efa4caf66b59862d624bb6ef788345 AS poetry_installed
+FROM python:3.14.2-alpine3.23@sha256:31da4cb527055e4e3d7e9e006dffe9329f84ebea79eaca0a1f1c27ce61e40ca5 AS poetry_installed
 
 RUN apk update && apk add --no-cache curl python3-dev libressl-dev gcc libc6-compat rust libc-dev cargo pkgconf py3-openssl
 
@@ -10,7 +10,7 @@ COPY app/pyproject.toml app/poetry.lock ./
 
 RUN poetry export -o requirements.txt
 
-FROM python:3.14.2-alpine3.23@sha256:7af51ebeb83610fb69d633d5c61a2efb87efa4caf66b59862d624bb6ef788345 AS COMPILE_LAYER
+FROM python:3.14.2-alpine3.23@sha256:31da4cb527055e4e3d7e9e006dffe9329f84ebea79eaca0a1f1c27ce61e40ca5 AS COMPILE_LAYER
 
 RUN apk update && apk add --no-cache python3-dev build-base linux-headers
 
@@ -22,7 +22,7 @@ RUN python3 -m pip install -r requirements.txt
 
 RUN pip wheel -w /wheels -r requirements.txt
 
-FROM python:3.14.2-alpine3.23@sha256:7af51ebeb83610fb69d633d5c61a2efb87efa4caf66b59862d624bb6ef788345 AS app
+FROM python:3.14.2-alpine3.23@sha256:31da4cb527055e4e3d7e9e006dffe9329f84ebea79eaca0a1f1c27ce61e40ca5 AS app
 
 COPY --from=COMPILE_LAYER /wheels /wheels
 RUN python3 -m pip install --no-index --find-links=/wheels /wheels/*.whl
