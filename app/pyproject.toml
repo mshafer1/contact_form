@@ -1,9 +1,12 @@
-[tool.poetry]
+[project]
 name = "contact_form"
 version = "0.2.0"
 description = "A flask based contact form"
-authors = ["mshafer1 <2565361+mshafer1@users.noreply.github.com>"]
+authors = [
+    { name = "Maker By Night" }
+]
 license = "MIT"
+dynamic = ["dependencies"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
