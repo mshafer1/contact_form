@@ -1,4 +1,3 @@
-import fnmatch as _fnmatch
 import pathlib as _pathlib
 import typing as _typing
 

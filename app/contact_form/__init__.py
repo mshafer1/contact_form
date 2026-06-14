@@ -19,6 +19,7 @@ app.secret_key = _secret_key
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
+
 class _ContactForm(flask_wtf.FlaskForm):
     name = wtforms.StringField(
         "Your Name",
@@ -53,17 +54,23 @@ def _send_email(name, email, message, domain):
 
     if not _sendgrid_api_key:
         print("SENDGRID_API_KEY not configured. Email will not be sent.")
-        print("testing mode, not sending:", name, email, message, "From:", domain, config.sender_address, config.recipient_address)
+        print(
+            "testing mode, not sending:",
+            name,
+            email,
+            message,
+            "From:",
+            domain,
+            config.sender_address,
+            config.recipient_address,
+        )
         return "TEST_VALID" in message
 
     sg = sendgrid.SendGridAPIClient(api_key=_sendgrid_api_key)
     message = sendgrid.helpers.mail.Mail(
-        from_email=sendgrid.helpers.mail.Email(
-            config.sender_address, f"{name} via contact form"
-        ),
+        from_email=sendgrid.helpers.mail.Email(config.sender_address, f"{name} via contact form"),
         subject=(
-            f"New message from {name} via the contact form "
-            f"- Message ID {uuid.uuid4().hex[:8]}"
+            f"New message from {name} via the contact form " f"- Message ID {uuid.uuid4().hex[:8]}"
         ),
         to_emails=config.recipient_address,
         plain_text_content=f"Message from {name}\n\n{message}",
@@ -77,7 +84,6 @@ def _send_email(name, email, message, domain):
         print(e)
         return False
     return True
-        
 
 
 @app.route("/", methods=["GET", "POST"])
