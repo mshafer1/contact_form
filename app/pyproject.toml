@@ -17,7 +17,7 @@ supervisor = { version="^4.3.0", platform="linux"}
 pyyaml = "^6.0.3"
 
 [tool.poetry.group.dev.dependencies]
-ni-python-styleguide = "^0.4.7"
+ni-python-styleguide = "^0.5.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
