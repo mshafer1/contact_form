@@ -9,6 +9,7 @@ repos:
     rev: 25.12.0
     hooks:
       - id: black
+        args: ["-l", "100"]
   - repo: local
     hooks:
       - id: linux-only-docker-scan-secrets

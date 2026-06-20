@@ -1,6 +1,7 @@
 """contact form app."""
 
 import fnmatch
+import re
 import uuid
 
 import flask
@@ -70,7 +71,7 @@ def _send_email(name, email, message, domain):
     message = sendgrid.helpers.mail.Mail(
         from_email=sendgrid.helpers.mail.Email(config.sender_address, f"{name} via contact form"),
         subject=(
-            f"New message from {name} via the contact form " f"- Message ID {uuid.uuid4().hex[:8]}"
+            f"New message from {name} via the contact form - Message ID {uuid.uuid4().hex[:8]}"
         ),
         to_emails=config.recipient_address,
         plain_text_content=f"Message from {name}\n\n{message}",
@@ -79,7 +80,8 @@ def _send_email(name, email, message, domain):
     try:
         sg = sendgrid.SendGridAPIClient(api_key=_sendgrid_api_key)
         response = sg.send(message)
-        print("Email sent, response code:", response.status_code)
+        escaped_name = re.sub(r"[^a-zA-Z0-9\-\ ]", "_", name)
+        print(f"Email from {escaped_name} sent, response code:", response.status_code)
     except Exception as e:
         print(e)
         return False
