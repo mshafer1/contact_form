@@ -10,16 +10,16 @@ repos:
     hooks:
       - id: black
   - repo: local
-    hook:
+    hooks:
       - id: linux-only-docker-scan-secrets
         name: Use docker to scan Git for secrets (Linux only)
         entry: >-
-          bash -c '[[ "$(uname)" == "Linux" ]] || exit 0; 
-          docker run 
+          bash -c '[[ "$(uname)" == "Linux" ]] || exit 0;
+          docker run
           -e GIT_CONFIG_COUNT=1
           -e GIT_CONFIG_KEY_0="safe.directory"
           -e GIT_CONFIG_VALUE_0="/src"
-          --rm 
+          --rm
           -v $(pwd):/src
           ghcr.io/betterleaks/betterleaks:latest
           git /src'
