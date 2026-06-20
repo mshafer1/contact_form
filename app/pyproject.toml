@@ -7,9 +7,9 @@ authors = [
 ]
 license = "MIT"
 dynamic = ["dependencies"]
+requires-python = ">=3.11,<4"
 
 [tool.poetry.dependencies]
-python = "^3.11"
 Flask = "^3.1.2"
 Flask-WTF = "^1.2.2"
 python-decouple = "^3.8"
@@ -21,6 +21,30 @@ pyyaml = "^6.0.3"
 
 [tool.poetry.group.dev.dependencies]
 ni-python-styleguide = "^0.5.0"
+flake8-logging = "^1.8.0"
+
+
+[tool.poetry.group.security.dependencies]
+bandit = "^1.9.4"
+pip-audit = "^2.10.1"
+pre-commit = "^4.6.0"
+
+
+[tool.poetry.group.tools.dependencies]
+poethepoet = "^0.46.0"
+
+[tool.poe.tasks]
+format = "poetry run ni-python-styleguide format"
+lint = "poetry run ni-python-styleguide lint"
+_export_reqs = "poetry export -o requirements.txt"
+_pip_audit = "poetry run pip-audit -r requirements.txt"
+_cleanup_reqs = "rm -f requirements.txt"
+pip-audit = ["_export_reqs", "_pip_audit", "_cleanup_reqs"]
+snyk = "snyk code test"
+lock-check = "poetry check --lock"
+# things that can't run on all machines specifically excluded
+all = ["format", "lint", "lock-check"]
+security = ["pip-audit", "snyk"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

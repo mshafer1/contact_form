@@ -22,6 +22,15 @@ _config_dir: _typing.Optional[_pathlib.Path] = _decouple.config(
     "CONFIG_DIR", default=_pathlib.Path(__file__).parent, cast=_pathlib.Path
 )
 
+DEBUG_MODE: bool = _decouple.config("DEBUG_MODE", default=False, cast=bool)
+
+if DEBUG_MODE:
+    BIND_HOST: str = (
+        "0.0.0.0"  # nosec # allow binding to all interfaces in debug mode for easier testing
+    )
+else:
+    BIND_HOST: str = "127.0.0.1"
+
 print(f"CONFIG_DIR is {_config_dir}")
 _config_file: _typing.Optional[_pathlib.Path] = (
     None if _config_dir is None else (_config_dir / ".config.yaml")
