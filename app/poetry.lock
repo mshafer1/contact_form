@@ -661,14 +661,14 @@ pydocstyle = ">=2.1"
 
 [[package]]
 name = "flake8-import-order"
-version = "0.18.2"
+version = "0.19.2"
 description = "Flake8 and pylama plugin that checks the ordering of import statements."
 optional = false
 python-versions = "*"
 groups = ["dev"]
 files = [
-    {file = "flake8-import-order-0.18.2.tar.gz", hash = "sha256:e23941f892da3e0c09d711babbb0c73bc735242e9b216b726616758a920d900e"},
-    {file = "flake8_import_order-0.18.2-py2.py3-none-any.whl", hash = "sha256:82ed59f1083b629b030ee9d3928d9e06b6213eb196fe745b3a7d4af2168130df"},
+    {file = "flake8_import_order-0.19.2-py3-none-any.whl", hash = "sha256:2dfe60175e7195cf36d4c573861fd2e3258cd6650cbd7616da3c6b8193b29b7c"},
+    {file = "flake8_import_order-0.19.2.tar.gz", hash = "sha256:133b3c55497631e4235074fc98a95078bba817832379f22a31f0ad2455bcb0b2"},
 ]
 
 [package.dependencies]
@@ -1079,14 +1079,14 @@ files = [
 
 [[package]]
 name = "ni-python-styleguide"
-version = "0.5.0"
+version = "0.5.1"
 description = "NI's internal and external Python linter rules and plugins"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["dev"]
 files = [
-    {file = "ni_python_styleguide-0.5.0-py3-none-any.whl", hash = "sha256:66784d97bc2898552386ca8e0667a11fa5f712820130585df7709d08836f6bc0"},
-    {file = "ni_python_styleguide-0.5.0.tar.gz", hash = "sha256:66bd05f7d9fc98a87e5e85319faa752efd54549c979938ed1bb64e2d1f412630"},
+    {file = "ni_python_styleguide-0.5.1-py3-none-any.whl", hash = "sha256:3127122d3610502cf1407d820b1512d887da52c9c0d17f6ccdb1da3e13a06243"},
+    {file = "ni_python_styleguide-0.5.1.tar.gz", hash = "sha256:9b362135c816ba6e5907e5630bc492102f282c0971b4db371514bc01ee54a2a9"},
 ]
 
 [package.dependencies]
@@ -1099,7 +1099,7 @@ flake8 = [
 ]
 flake8-black = ">=0.2.1"
 flake8-docstrings = ">=1.5.0"
-flake8-import-order = ">=0.18.1,<0.19.0"
+flake8-import-order = ">=0.19.2,<0.20.0"
 flake8-tidy-imports = ">=4.11.0"
 isort = ">=5.10"
 pathspec = ">=0.11.1"
@@ -1108,7 +1108,6 @@ pycodestyle = [
     {version = ">=2.11,<3.0", markers = "python_version >= \"3.12\" and python_version < \"4.0\""},
     {version = ">=2.9,<3.0", markers = "python_version >= \"3.8\" and python_version < \"3.12\""},
 ]
-setuptools = "<82"
 toml = ">=0.10.1"
 
 [[package]]
@@ -1289,14 +1288,14 @@ files = [
 
 [[package]]
 name = "poethepoet"
-version = "0.46.0"
+version = "0.48.0"
 description = "A task runner that works well with poetry and uv."
 optional = false
 python-versions = ">=3.10"
 groups = ["tools"]
 files = [
-    {file = "poethepoet-0.46.0-py3-none-any.whl", hash = "sha256:dc6d770a14792d124abac9066c5a707876027d1878ac9ca26cf57e9b2a96dc89"},
-    {file = "poethepoet-0.46.0.tar.gz", hash = "sha256:daf8469031879ef59ef0b34fdba83574d65e41eb9186e20cd0f7c89ce479b030"},
+    {file = "poethepoet-0.48.0-py3-none-any.whl", hash = "sha256:98da6096d060f49b8d84034770265863fb7dc92a40233b7694b9d216ac68737d"},
+    {file = "poethepoet-0.48.0.tar.gz", hash = "sha256:a06f49d244fadfc2e2e7faa78b54e64a9694727e4ce1d50e08f23cea3ded74f1"},
 ]
 
 [package.dependencies]
@@ -1308,14 +1307,14 @@ poetry-plugin = ["poetry (>=1.2.0,<3.0.0) ; python_version < \"4.0\""]
 
 [[package]]
 name = "pre-commit"
-version = "4.6.0"
+version = "4.6.2"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 optional = false
 python-versions = ">=3.10"
 groups = ["security"]
 files = [
-    {file = "pre_commit-4.6.0-py2.py3-none-any.whl", hash = "sha256:e2cf246f7299edcabcf15f9b0571fdce06058527f0a06535068a86d38089f29b"},
-    {file = "pre_commit-4.6.0.tar.gz", hash = "sha256:718d2208cef53fdc38206e40524a6d4d9576d103eb16f0fec11c875e7716e9d9"},
+    {file = "pre_commit-4.6.2-py2.py3-none-any.whl", hash = "sha256:e2dde9a75d3bce11bd3831c26d134df00a2803c1d818be6a0383c3dcda25dc4e"},
+    {file = "pre_commit-4.6.2.tar.gz", hash = "sha256:8f5d7bfb021ecdbcd9d49d89847082dd24172ccde534390081a679ad046e2441"},
 ]
 
 [package.dependencies]
@@ -1950,4 +1949,4 @@ email = ["email-validator (>=2.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<4"
-content-hash = "a272352641743281e0ca5c087ad14137b65266f5cb3d1acfb54c568305d05d39"
+content-hash = "f8678e9d860f465f581dde2f77b3722b370f3177ea1d9f63c54a0b1c96be3999"
