@@ -1,4 +1,4 @@
-# Conact_Form
+# Contact_Form
 
 A simple flask based contact form built on:
 - [Flask](https://pypi.org/project/Flask/) (for the routing and form handling)
