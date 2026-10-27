@@ -92,7 +92,12 @@ def _send_email(name, email, message, domain):
         sg = sendgrid.SendGridAPIClient(api_key=_sendgrid_api_key)
         response = sg.send(message)
         escaped_name = re.sub(r"[^a-zA-Z0-9\-\ ]", "_", name)
-        print(f"Email from {escaped_name} sent, response code:", response.status_code)
+        dest = (
+            "main recipient"
+            if recipient_address == config.recipient_address
+            else "developer override recipient"
+        )
+        print(f"Email from {escaped_name} sent to {dest}, response code:", response.status_code)
     except Exception as e:
         print(e)
         return False
