@@ -44,7 +44,7 @@ Problems with this route:
 
 [reference](https://www.cognitoforms.com/pricing)
 
-At the time of writing, free plan limits to 500 entries / month. For a form that I want to work for up to 100 / day, I need a plan that allows 3k / Month. 
+At the time of writing, free plan limits to 500 entries / month. For a form that I want to work for up to 100 / day, I need a plan that allows 3k / Month.
 Their first plan that offers that costs $20/mo. By comparison, it is cheaper to [rent a VPS](https://techit.mandmshafer.com/Blog/website_hosting_platforms_review.html#high-level-comparison).
 
 Problems with this route:
@@ -54,11 +54,11 @@ Problems with this route:
 
 [reference](https://community.cloudflare.com/t/emailing-through-a-contact-form-on-a-static-site-is-possible-right/680464/4)
 
-At the time of writing, the free plan limits to 50 submissions / month. For a form that I want to work for up to 100 / day, I need a plan that allows 3k / Month. 
-Their first plan that offers that costs $60/mo. That's $720 /yr. 
+At the time of writing, the free plan limits to 50 submissions / month. For a form that I want to work for up to 100 / day, I need a plan that allows 3k / Month.
+Their first plan that offers that costs $60/mo. That's $720 /yr.
 
 
-  
+
 ## Setup
 
 Prerequisites:
@@ -98,22 +98,24 @@ Steps:
     - `SENDGRID_CONTACT_ADDRESS=` the email address to send messages to.
 
     **NOTE:** To handle multiple domains with different recipients based on the form domain
-        
+
       1. Remove `SENDGRID_SENDER_ADDRESS` and `SENDGRID_CONTACT_ADDRESS` from the `.env` file.
       1. Create a `.config.yaml` (location defaults to the `contact_form` folder, and can be configured by `CONFIG_DIR` in the `.env` file)
       1. Format `.config.yaml` as a list containing dictionaries. Each dictionary needs to provide:
-       
+
             * `pattern`, the `fnmatch` glob used to determine if the submitted form's domain is for this set (use '*' for all)
             * `sender_address`, the sender for this domain
             * `recipient_address`, the recipient of the contact form for this domain
+            * `developer_address` (optional), an override email for local testing when a secure `dev-test-email=1` cookie is present
 
       1. Place groups in order of precedence (first match is taken)
-    
+
       ```yaml
       # example .config.yaml
       - pattern: '*.example.com'
         sender_address: 'no-reply@example.com'
         recipient_address: admin@example.com
+        developer_address: dev@example.com
       - pattern: domain2.com
         sender_address: 'no-reply@domain2.com'
         recipient_address: admin@domain2.com
@@ -124,11 +126,11 @@ Steps:
     - (Optional) Use `REQUIRE_EMBED=1` to disallow "none" as a valid referrer (only takes affect if `DOMAIN_ONLY=1` is used)
 
 1. Bring up the service container
-    
+
     `pushd ./image && docker compose build && docker compose up -d && popd`
 
 1. Configure nginx site (run as root, or replace "make" with "sudo make")
-    
+
     `pushd ./hosting && make install && popd`
 
 1. (Optional) if hosting directly (exposed ports on server), use certbot to setup SSL cert to serve app over https -> (Alternative setup, see [Network Chuck's Video on using CloudFlare Tunnel](https://www.youtube.com/watch?v=ey4u7OUAF3c&t=188s&pp=ygUlbmV0d29ya2NodWNrIGV4cG9zZSB5b3VyIGhvbWUgbmV0d29yaw%3D%3D))

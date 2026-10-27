@@ -17,12 +17,19 @@ class DomainConfig(_typing.NamedTuple):
     recipient_address: str
     """Address this domain should send to."""
 
+    developer_address: _typing.Optional[str] = None
+    """Optional override recipient used when the dev test cookie is enabled."""
+
 
 _config_dir: _typing.Optional[_pathlib.Path] = _decouple.config(
     "CONFIG_DIR", default=_pathlib.Path(__file__).parent, cast=_pathlib.Path
 )
 
 DEBUG_MODE: bool = _decouple.config("DEBUG_MODE", default=False, cast=bool)
+
+DEVELOPER_TEST_COOKIE_NAME: str = _decouple.config(
+    "DEVELOPER_TEST_COOKIE_NAME", default="dev-test-email"
+)
 
 if DEBUG_MODE:
     BIND_HOST: str = (

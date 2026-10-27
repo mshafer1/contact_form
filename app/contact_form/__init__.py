@@ -42,6 +42,13 @@ class _ContactForm(flask_wtf.FlaskForm):
     )
 
 
+def _is_dev_test_cookie_enabled():
+    cookie_value = flask.request.cookies.get(_config.DEVELOPER_TEST_COOKIE_NAME)
+    if cookie_value is None:
+        return False
+    return str(cookie_value).strip() == "1"
+
+
 def _send_email(name, email, message, domain):
     for config in _config.domains:
         if fnmatch.fnmatch(domain, config.pattern):
@@ -53,6 +60,10 @@ def _send_email(name, email, message, domain):
         )
         return False
 
+    recipient_address = config.recipient_address
+    if config.developer_address and _is_dev_test_cookie_enabled():
+        recipient_address = config.developer_address
+
     if not _sendgrid_api_key:
         print("SENDGRID_API_KEY not configured. Email will not be sent.")
         print(
@@ -63,7 +74,7 @@ def _send_email(name, email, message, domain):
             "From:",
             domain,
             config.sender_address,
-            config.recipient_address,
+            recipient_address,
         )
         return "TEST_VALID" in message
 
@@ -73,7 +84,7 @@ def _send_email(name, email, message, domain):
         subject=(
             f"New message from {name} via the contact form - Message ID {uuid.uuid4().hex[:8]}"
         ),
-        to_emails=config.recipient_address,
+        to_emails=recipient_address,
         plain_text_content=f"Message from {name}\n\n{message}",
     )
     message.reply_to = sendgrid.helpers.mail.Email(email, name)
